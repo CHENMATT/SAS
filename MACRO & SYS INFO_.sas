@@ -18,35 +18,28 @@
  *                 ======`-.____`-.___\_____/___.-`____.-'======
  *                                    `=---='
  *                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *                            ·ğ×æ±£ÓÓ        ÓÀÎŞBUG
- *                   ·ğÔ»:
- *                          Ğ´×ÖÂ¥ÀïĞ´×Ö¼ä£¬Ğ´×Ö¼äÀï³ÌĞòÔ±£»
- *                          ³ÌĞòÈËÔ±Ğ´³ÌĞò£¬ÓÖÄÃ³ÌĞò»»¾ÆÇ®¡£
- *                          ¾ÆĞÑÖ»ÔÚÍøÉÏ×ø£¬¾Æ×í»¹À´ÍøÏÂÃß£»
- *                          ¾Æ×í¾ÆĞÑÈÕ¸´ÈÕ£¬ÍøÉÏÍøÏÂÄê¸´Äê¡£
- *                          µ«Ô¸ÀÏËÀµçÄÔ¼ä£¬²»Ô¸¾Ï¹ªÀÏ°åÇ°£»
- *                          ±¼³Û±¦Âí¹óÕßÈ¤£¬¹«½»×ÔĞĞ³ÌĞòÔ±¡£
- *                          ±ğÈËĞ¦ÎÒß¯·èñ²£¬ÎÒĞ¦×Ô¼ºÃüÌ«¼ú£»
- *                          ²»¼ûÂú½ÖÆ¯ÁÁÃÃ£¬ÄÄ¸ö¹éµÃ³ÌĞòÔ±£¿
+ *                            ä½›ç¥–ä¿ä½‘        æ°¸æ— BUG
+ *                   ä½›æ›°:
+ *                          å†™å­—æ¥¼é‡Œå†™å­—é—´ï¼Œå†™å­—é—´é‡Œç¨‹åºå‘˜ï¼›
+ *                          ç¨‹åºäººå‘˜å†™ç¨‹åºï¼Œåˆæ‹¿ç¨‹åºæ¢é…’é’±ã€‚
+ *                          é…’é†’åªåœ¨ç½‘ä¸Šåï¼Œé…’é†‰è¿˜æ¥ç½‘ä¸‹çœ ï¼›
+ *                          é…’é†‰é…’é†’æ—¥å¤æ—¥ï¼Œç½‘ä¸Šç½‘ä¸‹å¹´å¤å¹´ã€‚
+ *                          ä½†æ„¿è€æ­»ç”µè„‘é—´ï¼Œä¸æ„¿é èº¬è€æ¿å‰ï¼›
+ *                          å¥”é©°å®é©¬è´µè€…è¶£ï¼Œå…¬äº¤è‡ªè¡Œç¨‹åºå‘˜ã€‚
+ *                          åˆ«äººç¬‘æˆ‘å¿’ç–¯ç™«ï¼Œæˆ‘ç¬‘è‡ªå·±å‘½å¤ªè´±ï¼›
+ *                          ä¸è§æ»¡è¡—æ¼‚äº®å¦¹ï¼Œå“ªä¸ªå½’å¾—ç¨‹åºå‘˜ï¼Ÿ
 */
 
-%macro datechange(var);
-year_update=substr(&var,1,4)*1;
-month_update=substr(&var,6,2)*1;
-day_update=substr(&var,9,2)*1;
-hour_update=substr(&var,12,2)*1;
-minut_update=substr(&var,15,2)*1;
-sec_update=substr(&var,18,2)*1;
-date_update=mdy(month_update,day_update,year_update);format date_update date10.;
-&var._update=dhms(date_update,hour_update,minut_update,sec_update);
-format &var._update datetime.;
-drop year_update month_update day_update hour_update minut_update sec_update;
-%mend datechange;
+%macro datetimechange(var);
+date=mdy(substr(&var,6,2),substr(&var,9,2),substr(&var,1,4));format date yymmddn8.;
+time=hms(substr(&var,12,2),substr(&var,15,2),substr(&var,18,2));format time time8.;
+datetime=date*24*60*60+time;format datetime datetime25.6;
+%mend datetimechange;
 
 %let path=/usr/sasmeta/Lev1/SASApp/DEPOSE_FIC_TEXTE/SHAREDATA/SIGNANDGO/output_sql_table_info;
 /*%let day=%sysfunc(year(%sysfunc(today())))%sysfunc(putn(%sysfunc(month(%sysfunc(today()))),z2.))%sysfunc(putn(%sysfunc(day(%sysfunc(today()))),z2.));*/
-/*ÒÔÉÏ´úÂë£¬µ½ÁË±±¾©Ê±¼ä18£º00×óÓÒ£¬Ôò×Ô¶¯ÇĞ»»ÎªµÚ¶şÌì£¬´óÉñrunµÄ½á¹ûÕı³££¬ÎÒµÄ¾ÍÊÇÃ÷Ìì£¬ÅÂÊÇ×°ÁËÒ»¸ö¼Ùsas*/
-/*%let today=%sysfunc(today(),yymmddn8.);/*´óÉñrunµÄ½á¹ûÕı³££¬ÎÒµÄ¾ÍÊÇÃ÷Ìì£¬ÅÂÊÇ×°ÁËÒ»¸ö¼Ùsas*/
+/*ä»¥ä¸Šä»£ç ï¼Œåˆ°äº†åŒ—äº¬æ—¶é—´18ï¼š00å·¦å³ï¼Œåˆ™è‡ªåŠ¨åˆ‡æ¢ä¸ºç¬¬äºŒå¤©ï¼Œå¤§ç¥runçš„ç»“æœæ­£å¸¸ï¼Œæˆ‘çš„å°±æ˜¯æ˜å¤©ï¼Œæ€•æ˜¯è£…äº†ä¸€ä¸ªå‡sas*/
+/*%let today=%sysfunc(today(),yymmddn8.);/*å¤§ç¥runçš„ç»“æœæ­£å¸¸ï¼Œæˆ‘çš„å°±æ˜¯æ˜å¤©ï¼Œæ€•æ˜¯è£…äº†ä¸€ä¸ªå‡sas*/
 /**/
 
 data _null_;
@@ -76,9 +69,9 @@ run;
 
 %macro StoreFdsFormat;
 proc format;
-invalue $ storename "´óÈó·¢ãğÑôµê1071"="Shuyang 1071"  "´óÈó·¢»¨¶¼µê5008"="Huadu 5008" "´óÈó·¢ËÕ¼ÒÍÍµê3018"="Sujiatun 3018" 
-"´óÈó·¢³¬ÊĞ´ó»ª·Öµê1005"="Dahua 1005" "ÎŞÎı³¤½­µê105"="Wuxi 105" "Å·ÉĞÄÏ¾©½­Äşµê118"="Jiangning 118" "Å·ÉĞËÕÖİ½ğ¼¦ºşµê104"="Suzhou 104" 
-"Å·ÉĞ³¬ÊĞ"="Changyang 103" ;
+invalue $ storename "å¤§æ¶¦å‘æ²­é˜³åº—1071"="Shuyang 1071"  "å¤§æ¶¦å‘èŠ±éƒ½åº—5008"="Huadu 5008" "å¤§æ¶¦å‘è‹å®¶å±¯åº—3018"="Sujiatun 3018" 
+"å¤§æ¶¦å‘è¶…å¸‚å¤§ååˆ†åº—1005"="Dahua 1005" "æ— é”¡é•¿æ±Ÿåº—105"="Wuxi 105" "æ¬§å°šå—äº¬æ±Ÿå®åº—118"="Jiangning 118" "æ¬§å°šè‹å·é‡‘é¸¡æ¹–åº—104"="Suzhou 104" 
+"æ¬§å°šè¶…å¸‚"="Changyang 103" ;
 invalue $ FDSNAME "baizhitao"="Bai Zhitao" "liyan"="Li Yan" "zhongjiemei"="Zhong Jiemei" "liangjialiang"="Liang Jialiang" 
 "liumiao"="Liu Miao" "chenjialin"="Chen Jialin" "wangyang"="Wang Yang" "chenyan"="Chen Yan" "yangchaowei"="Yang Chaowei"
 "chenxingyue"="Chen Xingyue" "yinxiu"="Yin Xiu" "sunxiaobo"="Sun Xiaobo" "yangzhigang"="Yang Zhigang" 
